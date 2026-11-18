@@ -17,7 +17,7 @@
 
   /* ---------- calculations (same as the Excel sheet) ---------- */
   function compute(d) {
-    var sub1 = num(d.price) + num(d.insurance);
+    var sub1 = num(d.price) + num(d.insurance) + num(d.accessories);
     var sub2 = sub1 - num(d.rebate);
     var balance = sub2 - num(d.booking);
     var refund = num(d.loan) - balance;
@@ -47,6 +47,7 @@
     { title: "2. Payment breakdown", open: true, fields: [
       { key: "price", label: "Price", note: "Vehicle price", ph: "165,000.00", money: true },
       { key: "insurance", label: "Insurance Price", note: "Insurance premium after NCD", ph: "2,864.16", money: true },
+      { key: "accessories", label: "Car Accessories", note: "Added to subtotal", ph: "1,500.00", money: true },
       { calc: "sub1", label: "Subtotal" },
       { key: "rebate", label: "Less: Rebate Promotion", note: "Deducted from subtotal", ph: "10,000.00", money: true },
       { calc: "sub2", label: "Subtotal" },
@@ -215,6 +216,7 @@
     var rows = [
       { t: "Price", v: shown(d.price), n: "Vehicle price" },
       { t: "Insurance Price", v: shown(d.insurance), n: "Insurance premium after NCD" },
+      { t: "Car Accessories", v: shown(d.accessories), n: "Added to subtotal" },
       { t: "Subtotal", v: money(c.sub1), calc: 1 },
       { t: "Less: Rebate Promotion", v: shown(d.rebate), n: "Deducted from subtotal" },
       { t: "Subtotal", v: money(c.sub2), calc: 1 },
