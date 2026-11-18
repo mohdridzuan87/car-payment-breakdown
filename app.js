@@ -41,7 +41,7 @@
     { title: "1. Customer & vehicle", open: true, fields: [
       { key: "model", label: "Car Model", ph: "Innova Zenix 2.0V", caps: true },
       { key: "customer", label: "Customer", ph: "Customer name", caps: true },
-      { key: "phone", label: "Customer Phone Number", ph: "012-345 6789", mode: "tel" },
+      { key: "phone", label: "Customer Phone Number", ph: "012-345 6789", mode: "tel", phone: true },
       { key: "sa", label: "Sales Advisor Name", ph: "Wan Jasni", caps: true },
       { key: "branch", label: "Branch", ph: "PCM Telok Panglima Garang", caps: true }] },
     { title: "2. Payment breakdown", open: true, fields: [
@@ -74,6 +74,7 @@
     var input = el("input", { "data-k": f.key, type: "text", placeholder: f.ph || "" });
     if (f.caps) { input.setAttribute("autocapitalize", "characters"); input.className = "caps"; }
     if (f.mode) input.setAttribute("inputmode", f.mode);
+    if (f.phone) { input.setAttribute("type", "tel"); input.setAttribute("maxlength", "14"); input.setAttribute("autocomplete", "tel"); input.setAttribute("data-phone", "1"); }
     return el("label", { class: "f" }, [el("span", { text: f.label }), input]);
   }
   function buildForm() {
@@ -90,7 +91,7 @@
     document.querySelectorAll("#form [data-k]").forEach(function (i) {
       var v = data[i.getAttribute("data-k")]; v = v === undefined || v === null ? "" : v;
       i.value = v;
-      if (i.className === "mny" && v) i.dispatchEvent(new Event("input", { bubbles: true }));
+      if ((i.className === "mny" || i.getAttribute("data-phone")) && v) i.dispatchEvent(new Event("input", { bubbles: true }));
     });
     refreshCalc();
   }
@@ -98,7 +99,14 @@
     var k = e.target.getAttribute && e.target.getAttribute("data-k");
     if (!k || !current) return;
     var t = e.target;
-    if (t.className === "mny") {
+    if (t.getAttribute("data-phone")) {
+      var dg = t.value.replace(/\D/g, "").slice(0, 11);
+      var cut = 3, mid = dg.indexOf("011") === 0 ? 4 : 3;
+      var ph = dg.slice(0, cut);
+      if (dg.length > cut) ph += "-" + dg.slice(cut, cut + mid);
+      if (dg.length > cut + mid) ph += " " + dg.slice(cut + mid);
+      if (ph !== t.value) t.value = ph;
+    } else if (t.className === "mny") {
       var pos = t.selectionStart, before = t.value.slice(0, pos).replace(/[^0-9.]/g, "").length;
       var raw = t.value.replace(/[^0-9.]/g, ""), dot = raw.indexOf(".");
       if (dot >= 0) raw = raw.slice(0, dot + 1) + raw.slice(dot + 1).replace(/\./g, "").slice(0, 2);

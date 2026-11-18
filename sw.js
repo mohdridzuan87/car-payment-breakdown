@@ -1,5 +1,5 @@
 /* Offline cache for the Car Payment Breakdown app. Bump VERSION when files change. */
-var VERSION = "breakdown-v3";
+var VERSION = "breakdown-v4";
 var FILES = ["./", "index.html", "style.css", "app.js", "vendor/jspdf.umd.min.js",
   "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png"];
 
