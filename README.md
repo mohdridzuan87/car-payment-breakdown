@@ -1,4 +1,4 @@
-# Car Payment Breakdown
+# Loan Breakdown
 
 Phone app (PWA) for the Toyota Hire Purchase Loan "Calculation Payment Breakdown".
 Fill in the figures, the subtotals and refund calculate automatically, then export an A4 PDF.

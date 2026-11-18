@@ -1,6 +1,6 @@
 {
-  "name": "Toyota Car Payment Breakdown",
-  "short_name": "Breakdown",
+  "name": "Toyota Loan Breakdown",
+  "short_name": "Loan Breakdown",
   "description": "Hire Purchase Loan payment breakdown for customers. Export an A4 PDF.",
   "start_url": "./index.html",
   "scope": "./",
