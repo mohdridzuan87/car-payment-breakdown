@@ -38,13 +38,13 @@
   /* ---------- schema ----------
      Placeholders show example values only; the form always starts empty. */
   var SECTIONS = [
-    { title: "1. Customer & vehicle", open: true, fields: [
+    { title: "1. Customer & Vehicle Information", open: true, fields: [
       { key: "model", label: "Car Model", ph: "Innova Zenix 2.0V", caps: true },
       { key: "customer", label: "Customer", ph: "Customer name", caps: true },
       { key: "phone", label: "Customer Phone Number", ph: "012-345 6789", mode: "tel", phone: true },
       { key: "sa", label: "Sales Advisor Name", ph: "Wan Jasni", caps: true },
       { key: "branch", label: "Branch", ph: "PCM Telok Panglima Garang", caps: true }] },
-    { title: "2. Payment breakdown", open: true, fields: [
+    { title: "2. Payment Breakdown", open: true, fields: [
       { key: "price", label: "Price", note: "Vehicle price", ph: "165,000.00", money: true },
       { key: "insurance", label: "Insurance Price", note: "Insurance premium after NCD", ph: "2,864.16", money: true },
       { key: "accessories", label: "Car Accessories", note: "Added to subtotal", ph: "1,500.00", money: true },
