@@ -196,7 +196,7 @@
     var doc = new window.jspdf.jsPDF({ unit: "mm", format: "a4" });
     var c = compute(d), L = 15, R = 195, W = R - L;
     var RED = [200, 16, 46], GREY = [240, 240, 242];
-    function shown(v) { return v === "" || v === undefined || v === null ? "" : money(num(v)); }
+    function shown(v) { return v === "" || v === undefined || v === null || !String(v).trim() ? "-" : money(num(v)); }
 
     doc.setFillColor(RED[0], RED[1], RED[2]); doc.rect(0, 0, 210, 30, "F");
     doc.setTextColor(255); doc.setFont("helvetica", "bold"); doc.setFontSize(20); doc.text("Hire Purchase Loan", 105, 14, { align: "center" });
@@ -207,7 +207,7 @@
     info.forEach(function (r, i) {
       var y = 44 + i * 9;
       doc.setFont("helvetica", "bold"); doc.setFontSize(10.5); doc.text(r[0], L, y);
-      doc.setFont("helvetica", "normal"); doc.setFontSize(11); doc.text(String(r[1] || ""), L + 56, y);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(11); doc.text(String(r[1] || "").trim() || "-", L + 56, y);
       doc.setDrawColor(200); doc.setLineWidth(0.2); doc.line(L + 55, y + 1.8, R, y + 1.8);
     });
 
