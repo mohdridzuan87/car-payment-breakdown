@@ -70,7 +70,7 @@
     if (f.hint) return el("div", { class: "hint", text: f.hint });
     if (f.calc) return el("div", { class: "calc" + (f.big ? " big" : "") }, [el("span", { id: "l_" + f.calc, text: f.label }), el("span", { id: "c_" + f.calc, text: "-" })]);
     if (f.money) {
-      return el("div", { class: "money" }, [
+      return el("div", { class: "money" + (f.key === "loan" ? " loan" : "") }, [
         el("div", { class: "lbl" }, [el("span", { text: f.label }), f.note ? el("small", { class: "note", text: f.note }) : null]),
         el("input", { "data-k": f.key, type: "text", inputmode: "decimal", placeholder: f.ph || "0.00", class: "mny" })]);
     }
@@ -199,8 +199,8 @@
     function shown(v) { return v === "" || v === undefined || v === null || !String(v).trim() ? "-" : money(num(v)); }
 
     doc.setFillColor(RED[0], RED[1], RED[2]); doc.rect(0, 0, 210, 30, "F");
-    doc.setTextColor(255); doc.setFont("helvetica", "bold"); doc.setFontSize(20); doc.text("Hire Purchase Loan", 105, 14, { align: "center" });
-    doc.setFontSize(12); doc.setFont("helvetica", "normal"); doc.text("Calculation Payment Breakdown", 105, 23, { align: "center" });
+    doc.setTextColor(255); doc.setFont("helvetica", "normal"); doc.setFontSize(13); doc.text("Hire Purchase Loan", 105, 11, { align: "center" });
+    doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.text("Calculation Payment Breakdown", 105, 22.5, { align: "center" });
 
     doc.setTextColor(30);
     var info = [["Car Model:", d.model], ["Customer:", d.customer], ["Customer Phone Number:", d.phone], ["Sales Advisor Name:", d.sa], ["Branch:", d.branch]];
@@ -226,23 +226,28 @@
       { t: "Subtotal", v: money(c.sub2), calc: 1 },
       { t: "Less: Paid Booking Fee", v: shown(d.booking), n: "Already paid by customer" },
       { t: "Balance After Rebate & Booking", v: money(c.balance), calc: 1 },
-      { t: "Loan amount", v: shown(d.loan), n: "Bank loan approved" },
+      { t: "Loan amount", v: shown(d.loan), n: "Bank loan approved", loan: 1 },
       { t: refundLabel(c.refund), v: money(Math.abs(c.refund)), n: c.refund < 0 ? "Balance minus loan" : "Loan minus balance", big: 1 }
     ];
-    rows.forEach(function (r, i) {
-      var y = top + h + i * h;
-      if (r.big) { doc.setFillColor(253, 236, 239); doc.rect(L, y, W, h, "F"); }
-      else if (r.calc) { doc.setFillColor(GREY[0], GREY[1], GREY[2]); doc.rect(L, y, W, h, "F"); }
-      doc.setDrawColor(200); doc.setLineWidth(0.2); doc.rect(L, y, W, h, "S"); doc.line(cx2, y, cx2, y + h);
-      var bold = r.calc || r.big;
+    /* Loan amount: label + number bold, 20% bigger than the Balance row (10.5 -> 12.6).
+       Refund / Customer to pay: number bold, 50% bigger than its label (12 -> 18), taller row. */
+    var y = top + h;
+    rows.forEach(function (r) {
+      var rh = r.big ? 15 : h, base = y + rh / 2 + 1.8;
+      if (r.big) { doc.setFillColor(253, 236, 239); doc.rect(L, y, W, rh, "F"); }
+      else if (r.calc) { doc.setFillColor(GREY[0], GREY[1], GREY[2]); doc.rect(L, y, W, rh, "F"); }
+      doc.setDrawColor(200); doc.setLineWidth(0.2); doc.rect(L, y, W, rh, "S"); doc.line(cx2, y, cx2, y + rh);
+      var bold = r.calc || r.big || r.loan;
       doc.setTextColor(r.big ? RED[0] : 30, r.big ? RED[1] : 30, r.big ? RED[2] : 30);
-      doc.setFont("helvetica", bold ? "bold" : "normal"); doc.setFontSize(r.big ? 12 : 10.5);
-      doc.text(r.t, L + 3, y + 7.3);
-      doc.text(r.v, cx2 - 3, y + 7.3, { align: "right" });
-      if (r.n) { doc.setFont("helvetica", "italic"); doc.setFontSize(9.5); doc.setTextColor(95); doc.text(r.n, cx2 + 3, y + 7.3); }
+      doc.setFont("helvetica", bold ? "bold" : "normal"); doc.setFontSize(r.big ? 12 : r.loan ? 12.6 : 10.5);
+      doc.text(r.t, L + 3, base);
+      if (r.big) { doc.setFontSize(18); doc.text(r.v, cx2 - 3, base + 1.2, { align: "right" }); }
+      else doc.text(r.v, cx2 - 3, base, { align: "right" });
+      if (r.n) { doc.setFont("helvetica", "italic"); doc.setFontSize(9.5); doc.setTextColor(95); doc.text(r.n, cx2 + 3, base); }
+      y += rh;
     });
     doc.setTextColor(110); doc.setFont("helvetica", "italic"); doc.setFontSize(8);
-    doc.text("Figures are estimates for discussion and are subject to final bank and insurer approval.", L, top + h + rows.length * h + 8);
+    doc.text("Figures are estimates for discussion and are subject to final bank and insurer approval.", L, y + 8);
     return doc;
   }
   function fileName(d) {
