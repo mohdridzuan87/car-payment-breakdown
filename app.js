@@ -23,6 +23,7 @@
     var refund = num(d.loan) - balance;
     return { sub1: sub1, sub2: sub2, balance: balance, refund: refund };
   }
+  var DEFAULT_BRANCH = "TOYOTA | Panglima City Motor Sdn. Bhd.";
   function refundLabel(r) { return r < 0 ? "Customer to pay" : "Refund to customer"; }
 
   /* ---------- storage ---------- */
@@ -43,7 +44,7 @@
       { key: "customer", label: "Customer", ph: "Customer name", caps: true },
       { key: "phone", label: "Customer Phone Number", ph: "012-345 6789", mode: "tel", phone: true },
       { key: "sa", label: "Sales Advisor Name", ph: "Wan Jasni", caps: true },
-      { key: "branch", label: "Branch", ph: "PCM Telok Panglima Garang", caps: true }] },
+      { key: "branch", label: "Branch", ph: DEFAULT_BRANCH }] },
     { title: "2. Payment Breakdown", open: true, fields: [
       { key: "price", label: "Price", note: "Vehicle price", ph: "165,000.00", money: true },
       { key: "insurance", label: "Insurance Price", note: "Insurance premium after NCD", ph: "2,864.16", money: true },
@@ -187,33 +188,40 @@
     var o = { id: uid(), updated: Date.now(), data: {} };
     var last = forms[0] && forms[0].data;
     if (last && last.sa) o.data.sa = last.sa;         /* remember SA and branch from the last form */
-    if (last && last.branch) o.data.branch = last.branch;
+    o.data.branch = DEFAULT_BRANCH;                   /* branch always pre-filled */
     forms.unshift(o); saveAll(forms); openForm(o.id);
   }
 
   /* ---------- PDF (A4 portrait, laid out like the Excel sheet) ---------- */
   function buildPdf(d) {
     var doc = new window.jspdf.jsPDF({ unit: "mm", format: "a4" });
+    var F = "helvetica";                      /* Inter (apple.com-like); helvetica if the font file failed to load */
+    if (window.INTER_PDF) {
+      [["Regular", "normal"], ["Bold", "bold"], ["Italic", "italic"]].forEach(function (s) {
+        doc.addFileToVFS("Inter-" + s[0] + ".ttf", window.INTER_PDF[s[0]]); doc.addFont("Inter-" + s[0] + ".ttf", "Inter", s[1]);
+      });
+      F = "Inter";
+    }
     var c = compute(d), L = 15, R = 195, W = R - L;
     var RED = [200, 16, 46], GREY = [240, 240, 242];
     function shown(v) { return v === "" || v === undefined || v === null || !String(v).trim() ? "-" : money(num(v)); }
 
     doc.setFillColor(RED[0], RED[1], RED[2]); doc.rect(0, 0, 210, 30, "F");
-    doc.setTextColor(255); doc.setFont("helvetica", "normal"); doc.setFontSize(13); doc.text("Hire Purchase Loan", 105, 11, { align: "center" });
-    doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.text("Calculation Payment Breakdown", 105, 22.5, { align: "center" });
+    doc.setTextColor(255); doc.setFont(F, "normal"); doc.setFontSize(13); doc.text("Hire Purchase Loan", 105, 11, { align: "center" });
+    doc.setFont(F, "bold"); doc.setFontSize(22); doc.text("Calculation Payment Breakdown", 105, 22.5, { align: "center" });
 
     doc.setTextColor(30);
     var info = [["Car Model:", d.model], ["Customer:", d.customer], ["Customer Phone Number:", d.phone], ["Sales Advisor Name:", d.sa], ["Branch:", d.branch]];
     info.forEach(function (r, i) {
       var y = 44 + i * 9;
-      doc.setFont("helvetica", "bold"); doc.setFontSize(10.5); doc.text(r[0], L, y);
-      doc.setFont("helvetica", "normal"); doc.setFontSize(11); doc.text(String(r[1] || "").trim() || "-", L + 56, y);
+      doc.setFont(F, "normal"); doc.setFontSize(10.5); doc.setTextColor(95); doc.text(r[0], L, y); doc.setTextColor(30);
+      doc.setFont(F, "bold"); doc.setFontSize(11); doc.text(String(r[1] || "").trim() || "-", L + 56, y);
       doc.setDrawColor(200); doc.setLineWidth(0.2); doc.line(L + 55, y + 1.8, R, y + 1.8);
     });
 
     var top = 98, h = 11, cx2 = L + 118;   /* column split: item + amount | notes */
     doc.setFillColor(RED[0], RED[1], RED[2]); doc.rect(L, top, W, h, "F");
-    doc.setTextColor(255); doc.setFont("helvetica", "bold"); doc.setFontSize(10.5);
+    doc.setTextColor(255); doc.setFont(F, "bold"); doc.setFontSize(10.5);
     doc.text("Item", L + 3, top + 7.3); doc.text("Amount (RM)", cx2 - 3, top + 7.3, { align: "right" }); doc.text("Notes", cx2 + 3, top + 7.3);
     var rows = [
       { t: "Price", v: shown(d.price), n: "Vehicle price" },
@@ -237,16 +245,17 @@
       if (r.big) { doc.setFillColor(253, 236, 239); doc.rect(L, y, W, rh, "F"); }
       else if (r.calc) { doc.setFillColor(GREY[0], GREY[1], GREY[2]); doc.rect(L, y, W, rh, "F"); }
       doc.setDrawColor(200); doc.setLineWidth(0.2); doc.rect(L, y, W, rh, "S"); doc.line(cx2, y, cx2, y + rh);
-      var bold = r.calc || r.big || r.loan;
+      var bold = true;                         /* all figures bold (filled-in info) */
       doc.setTextColor(r.big ? RED[0] : 30, r.big ? RED[1] : 30, r.big ? RED[2] : 30);
-      doc.setFont("helvetica", bold ? "bold" : "normal"); doc.setFontSize(r.big ? 12 : r.loan ? 12.6 : 10.5);
-      doc.text(r.t, L + 3, base);
+      doc.setFont(F, bold ? "bold" : "normal"); doc.setFontSize(r.big ? 12 : r.loan ? 12.6 : 10.5);
+      doc.setFont(F, (r.calc || r.big || r.loan) ? "bold" : "normal"); doc.text(r.t, L + 3, base);
+      doc.setFont(F, "bold");
       if (r.big) { doc.setFontSize(18); doc.text(r.v, cx2 - 3, base + 1.2, { align: "right" }); }
       else doc.text(r.v, cx2 - 3, base, { align: "right" });
-      if (r.n) { doc.setFont("helvetica", "italic"); doc.setFontSize(9.5); doc.setTextColor(95); doc.text(r.n, cx2 + 3, base); }
+      if (r.n) { doc.setFont(F, "italic"); doc.setFontSize(9.5); doc.setTextColor(95); doc.text(r.n, cx2 + 3, base); }
       y += rh;
     });
-    doc.setTextColor(110); doc.setFont("helvetica", "italic"); doc.setFontSize(8);
+    doc.setTextColor(110); doc.setFont(F, "italic"); doc.setFontSize(8);
     doc.text("Figures are estimates for discussion and are subject to final bank and insurer approval.", L, y + 8);
     return doc;
   }

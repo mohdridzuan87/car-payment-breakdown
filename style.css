@@ -2,9 +2,13 @@
   --red: #C8102E; --red-dark: #9E0B22; --ink: #1d1d1f; --muted: #6b6b70; --line: #d9d9de;
   --bg: #f3f3f5; --card: #ffffff; --input: #fffbea; --calc: #f0f0f2;
 }
+/* apple.com style: SF Pro on Apple devices, Inter (closest free match) elsewhere */
+@font-face { font-family: "Inter"; src: url("vendor/inter-var-latin.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--ink);
-  font-family: Arial, "Helvetica Neue", Roboto, sans-serif; font-size: 16px; -webkit-text-size-adjust: 100%; }
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px; letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-text-size-adjust: 100%; }
+.bar-title, details.sec > summary, .calc, .order .name { letter-spacing: -0.02em; }
 button { font: inherit; cursor: pointer; }
 [hidden] { display: none !important; }
 
@@ -91,8 +95,13 @@ details.sec[open] > summary { border-bottom: 1px solid var(--line); }
   border-radius: 20px; font-size: 14px; z-index: 50; max-width: 90vw; text-align: center; }
 
 .f input.caps { text-transform: uppercase; }
+/* filled-in information is bold; empty placeholders stay light */
+.f input, .f select, .f textarea, .money input { font-weight: 700; }
+.f input::placeholder, .money input::placeholder { font-weight: 400; }
 
 .f .row2 select { width: 100%; font: inherit; font-size: 16px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--input); color: var(--ink); }
 
 .money .lbl .note { display: block; color: var(--muted); font-size: 12px; margin-top: 1px; }
 .f input::placeholder, .money input::placeholder { color: #b5b5ba; }
+/* long pre-filled branch name: fit on one line on small phones */
+.f input[data-k="branch"] { padding-left: 8px; padding-right: 8px; letter-spacing: -0.025em; }
