@@ -40,7 +40,7 @@
      Placeholders show example values only; the form always starts empty. */
   var SECTIONS = [
     { title: "1. Customer & Vehicle Information", open: true, fields: [
-      { key: "model", label: "Car Model", ph: "Innova Zenix 2.0V", caps: true },
+      { key: "model", label: "Car Model", ph: "Type or tap ▾ to pick a model", combo: true },
       { key: "customer", label: "Customer", ph: "Customer name", caps: true },
       { key: "phone", label: "Customer Phone Number", ph: "012-345 6789", mode: "tel", phone: true },
       { key: "sa", label: "Sales Advisor Name", ph: "Wan Jasni", caps: true },
@@ -75,6 +75,7 @@
         el("div", { class: "lbl" }, [el("span", { text: f.label }), f.note ? el("small", { class: "note", text: f.note }) : null]),
         el("input", { "data-k": f.key, type: "text", inputmode: "decimal", placeholder: f.ph || "0.00", class: "mny" })]);
     }
+    if (f.combo) return comboEl(f);
     var input = el("input", { "data-k": f.key, type: "text", placeholder: f.ph || "" });
     if (f.caps) { input.setAttribute("autocapitalize", "characters"); input.className = "caps"; }
     if (f.mode) input.setAttribute("inputmode", f.mode);
@@ -91,13 +92,38 @@
     form.addEventListener("input", onInput);
   }
 
+  /* Car Model: free typing + ▾ picker with every Toyota Malaysia model/variant (models.js) */
+  function comboEl(f) {
+    var M = window.TOYOTA_MODELS || { groups: [] };
+    var input = el("input", { "data-k": f.key, type: "text", placeholder: f.ph || "", list: "dl_" + f.key, autocomplete: "off" });
+    var sel = el("select", { class: "combo-pick", "aria-label": "Pick a Toyota model" },
+      [el("option", { value: "", text: "Pick a Toyota model" })].concat(M.groups.map(function (g) {
+        return el("optgroup", { label: g.model }, g.variants.map(function (v) { return el("option", { value: v, text: v }); }));
+      })));
+    sel.addEventListener("change", function () {
+      if (!sel.value) return;
+      input.value = sel.value; input.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    var dl = el("datalist", { id: "dl_" + f.key }, [].concat.apply([], M.groups.map(function (g) {
+      return g.variants.map(function (v) { return el("option", { value: v }); });
+    })));
+    return el("label", { class: "f" }, [el("span", { text: f.label }),
+      el("div", { class: "combo" }, [input, el("span", { class: "combo-btn", "aria-hidden": "true", text: "▾" }), sel]), dl]);
+  }
+  function syncCombos() {
+    document.querySelectorAll("#form .combo").forEach(function (c) {
+      var i = c.querySelector("input"), s = c.querySelector("select"), v = (i.value || "").trim().toLowerCase();
+      var hit = Array.prototype.find.call(s.options, function (o) { return o.value && o.value.toLowerCase() === v; });
+      s.value = hit ? hit.value : "";
+    });
+  }
   function fillForm(data) {
     document.querySelectorAll("#form [data-k]").forEach(function (i) {
       var v = data[i.getAttribute("data-k")]; v = v === undefined || v === null ? "" : v;
       i.value = v;
       if ((i.className === "mny" || i.getAttribute("data-phone")) && v) i.dispatchEvent(new Event("input", { bubbles: true }));
     });
-    refreshCalc();
+    syncCombos(); refreshCalc();
   }
   function onInput(e) {
     var k = e.target.getAttribute && e.target.getAttribute("data-k");

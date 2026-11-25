@@ -105,3 +105,9 @@ details.sec[open] > summary { border-bottom: 1px solid var(--line); }
 .f input::placeholder, .money input::placeholder { color: #b5b5ba; }
 /* long pre-filled branch name: fit on one line on small phones */
 .f input[data-k="branch"] { padding-left: 8px; padding-right: 8px; letter-spacing: -0.025em; }
+/* Car Model: editable text + ▾ picker (native select laid over the button) */
+.combo { position: relative; }
+.combo input { padding-right: 52px !important; }
+.combo-btn { position: absolute; top: 1px; right: 1px; bottom: 1px; width: 46px; display: flex; align-items: center; justify-content: center;
+  border-left: 1px solid var(--line); border-radius: 0 8px 8px 0; background: #fff3c4; color: var(--red); font-size: 18px; pointer-events: none; }
+.combo-pick { position: absolute; top: 0; right: 0; bottom: 0; width: 48px; opacity: 0; cursor: pointer; font-size: 16px; }
