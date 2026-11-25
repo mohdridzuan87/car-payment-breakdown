@@ -47,7 +47,7 @@
       { key: "sa", label: "Sales Advisor Name", ph: "Wan Jasni", caps: true },
       { key: "branch", label: "Branch", ph: DEFAULT_BRANCH }] },
     { title: "2. Payment Breakdown", open: true, fields: [
-      { key: "price", label: "Price", note: "Vehicle price", ph: "165,000.00", money: true },
+      { key: "price", label: "Price", note: "Vehicle price, auto-filled from Toyota Malaysia (Peninsular OTR, before rebate), can edit", ph: "165,000.00", money: true },
       { key: "insurance", label: "Insurance Price", note: "Insurance premium after NCD", ph: "2,864.16", money: true },
       { key: "accessories", label: "Car Accessories", note: "Added to subtotal", ph: "1,500.00", money: true },
       { key: "others", label: "Others", note: "Other charges, added to subtotal", ph: "500.00", money: true },
@@ -133,6 +133,11 @@
     var i = document.querySelector('#form [data-k="' + key + '"]'); if (!i || i.value === val) return;
     i.value = val; i.dispatchEvent(new Event("input", { bubbles: true }));
   }
+  function applyPrice() {
+    var P = (window.TOYOTA_MODELS || {}).prices || {};
+    var key = findCI(Object.keys(P), current && current.data.model);
+    if (key) setAmount("price", money(P[key]));                         /* typed model not in list: leave as is */
+  }
   function applyColour(modelChanged) {
     if (!current) return;
     var cols = coloursFor(current.data.model); if (!cols) return;       /* typed model not in list: leave as is */
@@ -183,7 +188,7 @@
       if (up !== t.value) { var p = t.selectionStart; t.value = up; try { t.setSelectionRange(p, p); } catch (x) { /* ignore */ } }
     }
     current.data[k] = t.value; refreshCalc(); scheduleSave();
-    if (k === "model") { setColourOptions(t.value); applyColour(true); syncCombos(); }
+    if (k === "model") { applyPrice(); setColourOptions(t.value); applyColour(true); syncCombos(); }
     else if (k === "colour") { applyColour(false); syncCombos(); }
   }
   function refreshCalc() {
