@@ -40,7 +40,8 @@
      Placeholders show example values only; the form always starts empty. */
   var SECTIONS = [
     { title: "1. Customer & Vehicle Information", open: true, fields: [
-      { key: "model", label: "Car Model", ph: "Type or tap ▾ to pick a model", combo: true },
+      { key: "model", label: "Car Model", ph: "Type or tap ▾ to pick a model", combo: "model" },
+      { key: "colour", label: "Car Colour", ph: "Pick the model first, then tap ▾", combo: "colour" },
       { key: "customer", label: "Customer", ph: "Customer name", caps: true },
       { key: "phone", label: "Customer Phone Number", ph: "012-345 6789", mode: "tel", phone: true },
       { key: "sa", label: "Sales Advisor Name", ph: "Wan Jasni", caps: true },
@@ -50,7 +51,7 @@
       { key: "insurance", label: "Insurance Price", note: "Insurance premium after NCD", ph: "2,864.16", money: true },
       { key: "accessories", label: "Car Accessories", note: "Added to subtotal", ph: "1,500.00", money: true },
       { key: "others", label: "Others", note: "Other charges, added to subtotal", ph: "500.00", money: true },
-      { key: "color", label: "Car Color", note: "Colour charge (e.g. premium colour), added to subtotal", ph: "800.00", money: true },
+      { key: "color", label: "Car Color", note: "Paint charge, auto-filled from Car Colour (can edit), added to subtotal", ph: "800.00", money: true },
       { calc: "sub1", label: "Subtotal" },
       { key: "rebate", label: "Less: Rebate Promotion", note: "Deducted from subtotal", ph: "10,000.00", money: true },
       { calc: "sub2", label: "Subtotal" },
@@ -94,21 +95,50 @@
 
   /* Car Model: free typing + ▾ picker with every Toyota Malaysia model/variant (models.js) */
   function comboEl(f) {
-    var M = window.TOYOTA_MODELS || { groups: [] };
+    var M = window.TOYOTA_MODELS || { groups: [], colours: {} };
+    var isModel = f.combo === "model";
     var input = el("input", { "data-k": f.key, type: "text", placeholder: f.ph || "", list: "dl_" + f.key, autocomplete: "off" });
-    var sel = el("select", { class: "combo-pick", "aria-label": "Pick a Toyota model" },
-      [el("option", { value: "", text: "Pick a Toyota model" })].concat(M.groups.map(function (g) {
+    var sel = el("select", { class: "combo-pick", id: "pick_" + f.key, "aria-label": isModel ? "Pick a Toyota model" : "Pick a colour" },
+      [el("option", { value: "", text: isModel ? "Pick a Toyota model" : "Pick the model first" })].concat(!isModel ? [] : M.groups.map(function (g) {
         return el("optgroup", { label: g.model }, g.variants.map(function (v) { return el("option", { value: v, text: v }); }));
       })));
     sel.addEventListener("change", function () {
       if (!sel.value) return;
       input.value = sel.value; input.dispatchEvent(new Event("input", { bubbles: true }));
     });
-    var dl = el("datalist", { id: "dl_" + f.key }, [].concat.apply([], M.groups.map(function (g) {
+    var dl = el("datalist", { id: "dl_" + f.key }, !isModel ? [] : [].concat.apply([], M.groups.map(function (g) {
       return g.variants.map(function (v) { return el("option", { value: v }); });
     })));
     return el("label", { class: "f" }, [el("span", { text: f.label }),
       el("div", { class: "combo" }, [input, el("span", { class: "combo-btn", "aria-hidden": "true", text: "▾" }), sel]), dl]);
+  }
+  /* Car Colour: list follows the picked variant; paint charge goes to the "Car Color" amount */
+  function findCI(list, v) { v = String(v || "").trim().toLowerCase(); return list.filter(function (x) { return x.toLowerCase() === v; })[0]; }
+  function coloursFor(model) {
+    var C = (window.TOYOTA_MODELS || {}).colours || {};
+    var key = findCI(Object.keys(C), model);
+    return key ? C[key] : null;
+  }
+  function setColourOptions(model) {
+    var sel = $("pick_colour"), dl = $("dl_colour"); if (!sel) return;
+    var cols = coloursFor(model) || [];
+    sel.innerHTML = ""; dl.innerHTML = "";
+    sel.appendChild(el("option", { value: "", text: cols.length ? "Pick a colour" : "Pick the model first" }));
+    cols.forEach(function (c) {
+      sel.appendChild(el("option", { value: c[0], text: c[0] + (c[1] > 0 ? "  (+RM " + money(c[1]) + ")" : "  (no charge)") }));
+      dl.appendChild(el("option", { value: c[0] }));
+    });
+  }
+  function setAmount(key, val) {
+    var i = document.querySelector('#form [data-k="' + key + '"]'); if (!i || i.value === val) return;
+    i.value = val; i.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+  function applyColour(modelChanged) {
+    if (!current) return;
+    var cols = coloursFor(current.data.model); if (!cols) return;       /* typed model not in list: leave as is */
+    var name = findCI(cols.map(function (c) { return c[0]; }), current.data.colour);
+    if (name) { var p = cols.filter(function (c) { return c[0] === name; })[0][1]; setAmount("color", p > 0 ? money(p) : ""); }
+    else if (modelChanged && current.data.colour) { setAmount("colour", ""); setAmount("color", ""); }  /* colour not offered on new model */
   }
   function syncCombos() {
     document.querySelectorAll("#form .combo").forEach(function (c) {
@@ -123,7 +153,7 @@
       i.value = v;
       if ((i.className === "mny" || i.getAttribute("data-phone")) && v) i.dispatchEvent(new Event("input", { bubbles: true }));
     });
-    syncCombos(); refreshCalc();
+    setColourOptions(data.model); syncCombos(); refreshCalc();
   }
   function onInput(e) {
     var k = e.target.getAttribute && e.target.getAttribute("data-k");
@@ -153,6 +183,8 @@
       if (up !== t.value) { var p = t.selectionStart; t.value = up; try { t.setSelectionRange(p, p); } catch (x) { /* ignore */ } }
     }
     current.data[k] = t.value; refreshCalc(); scheduleSave();
+    if (k === "model") { setColourOptions(t.value); applyColour(true); syncCombos(); }
+    else if (k === "colour") { applyColour(false); syncCombos(); }
   }
   function refreshCalc() {
     if (!current) return;
@@ -237,7 +269,7 @@
     doc.setFont(F, "bold"); doc.setFontSize(22); doc.text("Calculation Payment Breakdown", 105, 22.5, { align: "center" });
 
     doc.setTextColor(30);
-    var info = [["Car Model:", d.model], ["Customer:", d.customer], ["Customer Phone Number:", d.phone], ["Sales Advisor Name:", d.sa], ["Branch:", d.branch]];
+    var info = [["Car Model:", d.model], ["Car Colour:", d.colour], ["Customer:", d.customer], ["Customer Phone Number:", d.phone], ["Sales Advisor Name:", d.sa], ["Branch:", d.branch]];
     info.forEach(function (r, i) {
       var y = 44 + i * 9;
       doc.setFont(F, "normal"); doc.setFontSize(10.5); doc.setTextColor(95); doc.text(r[0], L, y); doc.setTextColor(30);
@@ -245,7 +277,7 @@
       doc.setDrawColor(200); doc.setLineWidth(0.2); doc.line(L + 55, y + 1.8, R, y + 1.8);
     });
 
-    var top = 98, h = 11, cx2 = L + 118;   /* column split: item + amount | notes */
+    var top = 106, h = 11, cx2 = L + 118;   /* column split: item + amount | notes */
     doc.setFillColor(RED[0], RED[1], RED[2]); doc.rect(L, top, W, h, "F");
     doc.setTextColor(255); doc.setFont(F, "bold"); doc.setFontSize(10.5);
     doc.text("Item", L + 3, top + 7.3); doc.text("Amount (RM)", cx2 - 3, top + 7.3, { align: "right" }); doc.text("Notes", cx2 + 3, top + 7.3);
@@ -254,7 +286,7 @@
       { t: "Insurance Price", v: shown(d.insurance), n: "Insurance premium after NCD" },
       { t: "Car Accessories", v: shown(d.accessories), n: "Added to subtotal" },
       { t: "Others", v: shown(d.others), n: "Other charges" },
-      { t: "Car Color", v: shown(d.color), n: "Colour charge" },
+      { t: "Car Color", v: shown(d.color), n: d.colour && String(d.colour).trim() ? "Paint charge: " + String(d.colour).trim() : "Paint charge" },
       { t: "Subtotal", v: money(c.sub1), calc: 1 },
       { t: "Less: Rebate Promotion", v: shown(d.rebate), n: "Deducted from subtotal" },
       { t: "Subtotal", v: money(c.sub2), calc: 1 },

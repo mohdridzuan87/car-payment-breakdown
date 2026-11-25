@@ -145,5 +145,835 @@ window.TOYOTA_MODELS = {
     "GR Corolla A/T"
    ]
   }
- ]
+ ],
+ "colours": {
+  "Vios 1.5E AT": [
+   [
+    "Spicy Scarlet SE",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Nebula Blue Metallic",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Platinum White Pearl",
+    400
+   ]
+  ],
+  "Vios 1.5G AT": [
+   [
+    "Spicy Scarlet SE",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Nebula Blue Metallic",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Platinum White Pearl",
+    400
+   ]
+  ],
+  "Vios 1.5 HEV AT": [
+   [
+    "Celestite Grey Metallic",
+    0
+   ],
+   [
+    "Platinum White Pearl",
+    400
+   ],
+   [
+    "Spicy Scarlet SE",
+    0
+   ],
+   [
+    "Attitude Black",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ]
+  ],
+  "Vios 1.5 HEV GR Sport": [
+   [
+    "Platinum White Pearl",
+    400
+   ],
+   [
+    "Spicy Scarlet SE",
+    0
+   ],
+   [
+    "Attitude Black",
+    0
+   ],
+   [
+    "2-tone Platinum White Pearl",
+    0
+   ],
+   [
+    "2-Tone Spicy Scarlet SE",
+    1500
+   ]
+  ],
+  "Yaris 1.5E AT": [
+   [
+    "2-tone Red Mica Metallic",
+    1500
+   ],
+   [
+    "2-tone Platinum White Pearl",
+    1800
+   ],
+   [
+    "Red Mica Metallic",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Platinum White Pearl",
+    0
+   ]
+  ],
+  "Yaris 1.5G AT": [
+   [
+    "2-tone Red Mica Metallic",
+    1500
+   ],
+   [
+    "2-tone Platinum White Pearl",
+    1800
+   ],
+   [
+    "Red Mica Metallic",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Platinum White Pearl",
+    0
+   ]
+  ],
+  "Yaris Cross 1.5S": [
+   [
+    "Dark Turquoise",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Attitude Black",
+    0
+   ],
+   [
+    "Spicy Scarlet SE",
+    0
+   ],
+   [
+    "Platinum Pearl White",
+    400
+   ]
+  ],
+  "Yaris Cross 1.5S HEV": [
+   [
+    "Dark Turquoise",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Attitude Black",
+    0
+   ],
+   [
+    "Spicy Scarlet SE",
+    0
+   ],
+   [
+    "Platinum Pearl White",
+    400
+   ]
+  ],
+  "Corolla 1.8G": [
+   [
+    "Platinum White Pearl",
+    800
+   ],
+   [
+    "Metal Stream Metallic",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Cement Gray Metallic",
+    0
+   ]
+  ],
+  "Corolla GR Sport": [
+   [
+    "2-tone Platinum White Pearl",
+    2000
+   ],
+   [
+    "2-tone Red Mica Metallic",
+    1500
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ]
+  ],
+  "Corolla Cross 1.8V AT": [
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Red Mica Metallic",
+    0
+   ],
+   [
+    "Platinum White Pearl",
+    800
+   ],
+   [
+    "Dark Turquoise",
+    0
+   ]
+  ],
+  "Corolla Cross HEV": [
+   [
+    "Celestite Grey Metallic",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Red Mica Metallic",
+    0
+   ],
+   [
+    "Platinum White Pearl",
+    800
+   ],
+   [
+    "Dark Turquoise",
+    0
+   ]
+  ],
+  "Corolla Cross HEV GR Sport": [
+   [
+    "2-tone Platinum White Pearl",
+    2000
+   ],
+   [
+    "2-tone Dark Turquoise",
+    1500
+   ],
+   [
+    "2-tone Red Mica Metallic",
+    1500
+   ]
+  ],
+  "Camry 2.5V AT": [
+   [
+    "Platinum White Pearl",
+    800
+   ],
+   [
+    "Emotional Red II",
+    800
+   ],
+   [
+    "Cement Gray Metallic",
+    0
+   ],
+   [
+    "Precious Metal",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Dark Blue Mica",
+    0
+   ]
+  ],
+  "Camry 2.5 HEV": [
+   [
+    "Platinum White Pearl",
+    800
+   ],
+   [
+    "Emotional Red II",
+    800
+   ],
+   [
+    "Cement Gray Metallic",
+    0
+   ],
+   [
+    "Precious Metal",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Dark Blue Mica",
+    0
+   ]
+  ],
+  "Veloz 1.5 AT": [
+   [
+    "Blue Metallic with Black Roof",
+    1300
+   ],
+   [
+    "Silver Metallic with Black Roof",
+    1300
+   ],
+   [
+    "Metallic Bluish Black",
+    0
+   ],
+   [
+    "Red Metallic",
+    0
+   ],
+   [
+    "White",
+    0
+   ]
+  ],
+  "Innova Zenix 2.0V": [
+   [
+    "Grey Metallic",
+    0
+   ],
+   [
+    "Platinum White Pearl",
+    1000
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ]
+  ],
+  "Innova Zenix 2.0 HEV": [
+   [
+    "Platinum White Pearl",
+    1000
+   ],
+   [
+    "Grey Metallic",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ]
+  ],
+  "Fortuner 2.4 AT 4WD": [
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Super White II",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Medium Silver Metallic",
+    0
+   ],
+   [
+    "Phantom Brown Metallic",
+    0
+   ],
+   [
+    "Bronze Mica Metallic",
+    0
+   ]
+  ],
+  "Fortuner 2.7 SRZ AT 4WD": [
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Super White II",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Medium Silver Metallic",
+    0
+   ],
+   [
+    "Phantom Brown Metallic",
+    0
+   ],
+   [
+    "Bronze Mica Metallic",
+    0
+   ]
+  ],
+  "Fortuner 2.8 VRZ AT 4WD": [
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Super White II",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ],
+   [
+    "Medium Silver Metallic",
+    0
+   ],
+   [
+    "Phantom Brown Metallic",
+    0
+   ],
+   [
+    "Super White II with Black Roof",
+    1500
+   ],
+   [
+    "Bronze Mica Metallic with Black Roof",
+    1500
+   ]
+  ],
+  "Hilux Single Cab 2.4 MT 4WD": [
+   [
+    "Solid White",
+    0
+   ]
+  ],
+  "Hilux Double Cab 2.4E MT 4WD": [
+   [
+    "Bronze Mica Metallic",
+    0
+   ],
+   [
+    "Phantom Brown Metallic",
+    0
+   ],
+   [
+    "Crimson Spark Red Metallic",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Super White II",
+    0
+   ],
+   [
+    "Medium Silver Metallic",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ]
+  ],
+  "Hilux Double Cab 2.4E AT 4WD": [
+   [
+    "Bronze Mica Metallic",
+    0
+   ],
+   [
+    "Phantom Brown Metallic",
+    0
+   ],
+   [
+    "Crimson Spark Red Metallic",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Super White II",
+    0
+   ],
+   [
+    "Medium Silver Metallic",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ]
+  ],
+  "Hilux Double Cab 2.4V AT 4WD": [
+   [
+    "Bronze Mica Metallic",
+    0
+   ],
+   [
+    "Phantom Brown Metallic",
+    0
+   ],
+   [
+    "Crimson Spark Red Metallic",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Super White II",
+    0
+   ],
+   [
+    "Medium Silver Metallic",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ]
+  ],
+  "Hilux Double Cab 2.8 Rogue AT 4WD": [
+   [
+    "Bronze Mica Metallic",
+    0
+   ],
+   [
+    "Phantom Brown Metallic",
+    0
+   ],
+   [
+    "Crimson Spark Red Metallic",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ],
+   [
+    "Super White II",
+    0
+   ],
+   [
+    "Medium Silver Metallic",
+    0
+   ],
+   [
+    "Silver Metallic",
+    0
+   ]
+  ],
+  "Hilux GR Sport": [
+   [
+    "Super White II",
+    0
+   ],
+   [
+    "Crimson Spark Red Metallic",
+    0
+   ],
+   [
+    "Attitude Black Mica",
+    0
+   ]
+  ],
+  "Hilux D/CAB BEV": [
+   [
+    "Ash",
+    0
+   ],
+   [
+    "Platinum White Pearl",
+    800
+   ],
+   [
+    "Super White 2",
+    0
+   ]
+  ],
+  "Hiace Panel Van 3.0 Turbo Diesel": [
+   [
+    "Solid White",
+    0
+   ]
+  ],
+  "Hiace SLWB 2.8 Turbo Diesel": [
+   [
+    "Solid White",
+    0
+   ]
+  ],
+  "Harrier 2.5 HEV": [
+   [
+    "Platinum White Pearl",
+    800
+   ],
+   [
+    "Grey Metallic",
+    0
+   ],
+   [
+    "Precious Black",
+    800
+   ]
+  ],
+  "bZ4X": [
+   [
+    "Precious Metal",
+    0
+   ],
+   [
+    "Attitude Black MC.",
+    0
+   ],
+   [
+    "Platinum White Pearl MC.",
+    800
+   ],
+   [
+    "Emotional Red 2",
+    0
+   ],
+   [
+    "DK. Blue MC.",
+    0
+   ]
+  ],
+  "Urban Cruiser": [
+   [
+    "Land Breeze Green",
+    0
+   ],
+   [
+    "Grandeur Grey",
+    0
+   ],
+   [
+    "Pearl Arctic White",
+    0
+   ],
+   [
+    "Pearl Bluish Black",
+    0
+   ]
+  ],
+  "Alphard 2.4T Executive Lounge": [
+   [
+    "Platinum White Pearl",
+    0
+   ],
+   [
+    "Precious Metal",
+    0
+   ],
+   [
+    "Neutral Black",
+    0
+   ],
+   [
+    "Precious Leo-Blond",
+    0
+   ]
+  ],
+  "Vellfire 2.5": [
+   [
+    "Neutral Black",
+    0
+   ],
+   [
+    "Precious Metal",
+    0
+   ],
+   [
+    "Platinum White Pearl",
+    0
+   ]
+  ],
+  "Vellfire 2.5 HEV AT Executive Lounge": [
+   [
+    "Platinum White Pearl",
+    0
+   ],
+   [
+    "Neutral Black",
+    0
+   ],
+   [
+    "Precious Metal",
+    0
+   ]
+  ],
+  "GR86 M/T": [
+   [
+    "Ignition Red",
+    0
+   ],
+   [
+    "Crystal White Pearl",
+    0
+   ],
+   [
+    "Crystal Black Silica",
+    0
+   ],
+   [
+    "Magnetite Gray Metallic",
+    0
+   ]
+  ],
+  "GR86 A/T": [
+   [
+    "Ignition Red",
+    0
+   ],
+   [
+    "Crystal White Pearl",
+    0
+   ],
+   [
+    "Crystal Black Silica",
+    0
+   ],
+   [
+    "Magnetite Gray Metallic",
+    0
+   ]
+  ],
+  "GR Yaris M/T": [
+   [
+    "Platinum White Pearl Mica",
+    0
+   ],
+   [
+    "Emotional Red 2",
+    0
+   ],
+   [
+    "Precious Black",
+    0
+   ],
+   [
+    "Precious Metal",
+    0
+   ]
+  ],
+  "GR Yaris A/T": [
+   [
+    "Platinum White Pearl Mica",
+    0
+   ],
+   [
+    "Emotional Red 2",
+    0
+   ],
+   [
+    "Precious Black",
+    0
+   ],
+   [
+    "Precious Metal",
+    0
+   ]
+  ],
+  "GR Corolla M/T": [
+   [
+    "Precious Metal",
+    0
+   ],
+   [
+    "Super White 2",
+    0
+   ],
+   [
+    "Emotional Red 2",
+    0
+   ],
+   [
+    "Black",
+    0
+   ]
+  ],
+  "GR Corolla A/T": [
+   [
+    "Precious Metal",
+    0
+   ],
+   [
+    "Super White 2",
+    0
+   ],
+   [
+    "Emotional Red 2",
+    0
+   ],
+   [
+    "Black",
+    0
+   ]
+  ]
+ }
 };
