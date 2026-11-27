@@ -111,3 +111,7 @@ details.sec[open] > summary { border-bottom: 1px solid var(--line); }
 .combo-btn { position: absolute; top: 1px; right: 1px; bottom: 1px; width: 46px; display: flex; align-items: center; justify-content: center;
   border-left: 1px solid var(--line); border-radius: 0 8px 8px 0; background: #fff3c4; color: var(--red); font-size: 18px; pointer-events: none; }
 .combo-pick { position: absolute; top: 0; right: 0; bottom: 0; width: 48px; opacity: 0; cursor: pointer; font-size: 16px; }
+/* NCD % picker: same box as the amount inputs */
+.money select.pick { width: 100%; font: inherit; font-size: 21px; font-weight: 700; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--input); color: var(--ink); text-align: right; text-align-last: right; }
+.money select.pick:focus { outline: 2px solid var(--red); background: #fff; }

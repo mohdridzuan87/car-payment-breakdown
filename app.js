@@ -48,7 +48,8 @@
       { key: "branch", label: "Branch", ph: DEFAULT_BRANCH }] },
     { title: "2. Payment Breakdown", open: true, fields: [
       { key: "price", label: "Price", note: "Vehicle price, auto-filled from Toyota Malaysia (Peninsular OTR, before rebate), can edit", ph: "165,000.00", money: true },
-      { key: "insurance", label: "Insurance Price", note: "Insurance premium after NCD", ph: "2,864.16", money: true },
+      { key: "ncd", label: "NCD %", note: "No Claim Discount, for the PDF only. Key in Insurance Price yourself", choices: ["", "0%", "25%", "30%", "38.33%", "45%", "55%"] },
+      { key: "insurance", label: "Insurance Price", note: "Insurance premium after NCD (key in manually)", ph: "2,864.16", money: true },
       { key: "accessories", label: "Car Accessories", note: "Added to subtotal", ph: "1,500.00", money: true },
       { key: "others", label: "Others", note: "Other charges, added to subtotal", ph: "500.00", money: true },
       { key: "color", label: "Car Color", note: "Paint charge, auto-filled from Car Colour (can edit), added to subtotal", ph: "800.00", money: true },
@@ -71,6 +72,11 @@
   function fieldEl(f) {
     if (f.hint) return el("div", { class: "hint", text: f.hint });
     if (f.calc) return el("div", { class: "calc" + (f.big ? " big" : "") }, [el("span", { id: "l_" + f.calc, text: f.label }), el("span", { id: "c_" + f.calc, text: "-" })]);
+    if (f.choices) {
+      return el("div", { class: "money" }, [
+        el("div", { class: "lbl" }, [el("span", { text: f.label }), f.note ? el("small", { class: "note", text: f.note }) : null]),
+        el("select", { "data-k": f.key, class: "pick" }, f.choices.map(function (c) { return el("option", { value: c, text: c || "Select" }); }))]);
+    }
     if (f.money) {
       return el("div", { class: "money" + (f.key === "loan" ? " loan" : "") }, [
         el("div", { class: "lbl" }, [el("span", { text: f.label }), f.note ? el("small", { class: "note", text: f.note }) : null]),
@@ -288,10 +294,10 @@
     doc.text("Item", L + 3, top + 7.3); doc.text("Amount (RM)", cx2 - 3, top + 7.3, { align: "right" }); doc.text("Notes", cx2 + 3, top + 7.3);
     var rows = [
       { t: "Price", v: shown(d.price), n: "Vehicle price" },
-      { t: "Insurance Price", v: shown(d.insurance), n: "Insurance premium after NCD" },
+      { t: "Insurance Price", v: shown(d.insurance), n: d.ncd ? "Insurance premium after NCD " + d.ncd : "Insurance premium after NCD" },
       { t: "Car Accessories", v: shown(d.accessories), n: "Added to subtotal" },
       { t: "Others", v: shown(d.others), n: "Other charges" },
-      { t: "Car Color", v: shown(d.color), n: d.colour && String(d.colour).trim() ? "Paint charge: " + String(d.colour).trim() : "Paint charge" },
+      { t: "Car Color", v: shown(d.color), n: d.colour && String(d.colour).trim() ? "Paint: " + String(d.colour).trim() : "Paint charge" },
       { t: "Subtotal", v: money(c.sub1), calc: 1 },
       { t: "Less: Rebate Promotion", v: shown(d.rebate), n: "Deducted from subtotal" },
       { t: "Subtotal", v: money(c.sub2), calc: 1 },
@@ -315,7 +321,7 @@
       doc.setFont(F, "bold");
       if (r.big) { doc.setFontSize(18); doc.text(r.v, cx2 - 3, base + 1.2, { align: "right" }); }
       else doc.text(r.v, cx2 - 3, base, { align: "right" });
-      if (r.n) { doc.setFont(F, "italic"); doc.setFontSize(9.5); doc.setTextColor(95); doc.text(r.n, cx2 + 3, base); }
+      if (r.n) { doc.setFont(F, "italic"); var ns = 9.5; doc.setFontSize(ns); while (ns > 6.5 && doc.getTextWidth(r.n) > R - cx2 - 5) { ns -= 0.25; doc.setFontSize(ns); } doc.setTextColor(95); doc.text(r.n, cx2 + 3, base); }  /* long notes shrink to fit */
       y += rh;
     });
     doc.setTextColor(110); doc.setFont(F, "italic"); doc.setFontSize(8);
